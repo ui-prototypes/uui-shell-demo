@@ -1,0 +1,122 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+ Copyright 2015 by Brocade Communication Systems
+ All rights reserved.
+
+ This software is the confidential and proprietary information
+ of Brocade Communication Systems, ("Confidential Information").
+ You shall not disclose such Confidential Information and shall
+ use it only in accordance with the terms of the license agreement
+ you entered into with Brocade Communication Systems.
+-->
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<link href="styles/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css" />
+		<link href="styles/layout-default.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div id="myGenericFormWorkArea" style="width: 100%; height: 100%; overflow-x:auto;">
+			<table id="myGenericFormWorkArea1" border="0" style="padding-top: 10px; padding-bottom: 10px; width: 500px;">
+				<tr>
+					<td style="width: 100px;" align="right">
+						<label class="ui-form-label-color"><span>* </span>Zone:</label>
+					</td>
+					<td>
+						<input type="text" id="zoneField" class="ui-form-input-color" style="width: 250px;" value="" title="Please enter name of the Zone"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 100px;" align="right">
+						<label class="ui-form-label-color"><span>*</span>Site:</label>
+					</td>
+					<td>
+						<select id="siteField" class="ui-form-input-color" style="width: 250px;" title="Please select the name of the Site" />
+					</td>
+				</tr>
+				<tr valign="top">
+					<td style="width: 100px;" align="right">
+						<label class="ui-form-label-no-padding-color" style="padding-left: 10px; padding-top: 10px;">Comment:</label>
+					</td>
+					<td>
+						<textarea id="commentField" class="ui-form-input-color" rows="3" cols="32" title="Please enter any comment associated with this entry">
+						</textarea>
+					</td>
+					<td style="width: 250px; font-size: 0.75em;">
+						Yes, this is a hokey sloppy looking form.
+						But it;s just a proof of concept, ok?
+					</td>
+				</tr>
+			</table>
+			<table border="0" style="padding-bottom: 10px;">
+				<tr>
+					<td style="width: 100px;" align="right">
+						<label style="padding-right: 10px; font-size: 16px;">Contact Info</label>
+					</td>
+					<td>
+						<hr style="width:500px;"/>
+					</td>
+				</tr>
+			</table>
+
+			<table id="myGenericFormWorkArea2" border="0">
+				<tr>
+					<td style="width: 100px;" align="right">
+						<label class="ui-form-label-color">Name:</label>
+					</td>
+					<td>
+						<input type="text" class="ui-form-input-color" id="nameField" style="width: 200px;" value="" title="Please enter the name of the Contact for this Zone" />
+					</td>
+					<td style="width: 80px;" align="right">
+						<label class="ui-form-label-color">Phone:</label>
+					</td>
+					<td>
+						<input type="text" class="ui-form-input-color" id="phoneField" style="width: 200px;" value="" title="Please enter the phone number of the Contact for this Zone"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 100px;" align="right">
+						<label class="ui-form-label-color">Address:</label>
+					</td>
+					<td>
+						<input type="text" id="addressField" class="ui-form-input-color" style="width: 200px;" value="" title="Please enter the address of the Contact for this Zone" />
+					</td>
+					<td style="width: 80px;" align="right">
+						<label class="ui-form-label-color">City:</label>
+					</td>
+					<td>
+						<input type="text" id="cityField" class="ui-form-input-color" style="width: 200px;" value="" title="Please enter the City of the Contact for this Zone"/>
+					</td>
+				</tr>
+				<tr>
+					<td style="width: 100px;" align="right">
+						<label class="ui-form-label-color">State:</label>
+					</td>
+					<td>
+						<input type="text" id="stateField" class="ui-form-input-color" style="width: 200px;" value="" title="Please enter the State of the Contact for this Zone" />
+					</td>
+					<td style="width: 80px;" align="right">
+						<label class="ui-form-label-color">Email:</label>
+					</td>
+					<td>
+						<input type="text" id="emailField" class="ui-form-input-color" style="width: 200px;" value="" title="Please enter the Email Address of the Contact for this Zone"/>
+					</td>
+				</tr>
+			</table>
+			<table border="0" style="width: 100%; padding-top: 10px; padding-right: 50px;">
+				<tr >
+					<td style="width: 100%; font-size: 0.75em; text-align: right;">
+						TODO: move these action buttons outside the<br/>
+						scrollable area so they are always visible
+					</td>
+					<td>
+						<input id="applyButton" type="button" class="workAreaControl" value="Apply" style="width: 65px;">
+					</td>
+					<td>
+						<input id="resetButton" type="button" class="workAreaControl" value="Reset" style="width: 65px;"/>
+					</td>
+				</tr>
+			</table>
+		</div>
+	</body>
+</html>

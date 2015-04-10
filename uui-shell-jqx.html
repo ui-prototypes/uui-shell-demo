@@ -1,0 +1,589 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<!--
+ Copyright 2015 by Brocade Communication Systems
+ All rights reserved.
+
+ This software is the confidential and proprietary information
+ of Brocade Communication Systems, ("Confidential Information").
+ You shall not disclose such Confidential Information and shall
+ use it only in accordance with the terms of the license agreement
+ you entered into with Brocade Communication Systems.
+-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="language" content="en" />
+
+		<title>UUI Shell - JQX</title>
+
+	    <link href="styles/jqx/jqx.base.css" rel="stylesheet" type="text/css" />
+		<link href="styles/jquery-ui-1.10.3.custom.css" rel="stylesheet" type="text/css" />
+		<link href="styles/layout-default.css" rel="stylesheet" type="text/css" />
+		<style>
+			// stuff for accordion menus
+			ul.menu-items
+			{
+				padding: 0 0 0 20px;
+				margin: 5px 0 0 0; // why is this not working?
+			}
+			.menu-items li
+			{
+				background-color:#ffffff;
+				cursor: pointer;
+				border: none;
+				margin: 0px 5px;
+				padding: 10px;
+				max-width: 150px;
+				color: #000000;
+				list-style: none;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+				font-size: 80% !important;
+			}
+			.menu-items li:hover
+			{
+				background-color:#eeeeee;
+			}
+			.accordionMenu
+			{
+				overflow: auto !important;
+				padding: 0px !important;
+			}
+			.blockMsg h3
+			{
+				font-size: 0.75em;
+			}
+			.workAreaControl
+			{
+				float: left;
+				height: 100%;
+				margin-right: 5px;
+				margin-top:3px;
+				font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+				font-size: 12px;
+				color: #222222;
+			}
+			.workAreaControl[disabled]
+			{
+				color: grey;
+			}
+			input[type="button"].workAreaControl
+			{
+				width: 65px;
+			}
+			img.workAreaControl
+			{
+				margin-top:6px;
+			}
+			.tabsInner div
+			{
+				background-color: #f4f4f4 !important;
+			}
+		</style>
+
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.resize.js"></script>
+		<script type="text/javascript" src="js/jquery.layout.js"></script>
+		<script type="text/javascript" src="js/jquery-ui.js"></script>
+		<script type="text/javascript" src="js/jquery.layout.resizePaneAccordions.js"></script>
+		<script type="text/javascript" src="js/framework/jquery.blockUI.js"></script>
+		<script type="text/javascript" src="js/framework/page-info.js"></script>
+		<script type="text/javascript" src="js/framework/form-page-info.js"></script>
+		<script type="text/javascript" src="js/login-page-info.js"></script>
+		<script type="text/javascript" src="js/framework/table-jqx-page-info.js"></script>
+		<script type="text/javascript" src="js/my-generic-page-info.js"></script>
+		<script type="text/javascript" src="js/jquery.i18n.properties-1.0.9.js"></script>
+		<script type="text/javascript" src="js/jqx/jqxcore.js"></script>
+		<script type="text/javascript" src="js/jqx/jqxtabs.js"></script>
+		<script type="text/javascript" src="js/jqx/jqxdata.js"></script>
+		<script type="text/javascript" src="js/jqx/jqxbuttons.js"></script>
+		<script type="text/javascript" src="js/jqx/jqxscrollbar.js"></script>
+		<script type="text/javascript" src="js/jqx/jqxdatatable.js"></script>
+		<script type="text/javascript" src="js/jqx/jqxtreegrid.js"></script>
+		<script type="text/javascript" src="js/jqx/jqx-demos.js"></script>
+
+		<script type="text/javascript">
+			$(document).ready( function() { initJQueryWidgets(); initMenus(); } );
+
+			var $mainLayout, $mainInnerLayout; // move this later
+
+			// init logic for jQuery stuff
+
+			function initJQueryWidgets()
+			{
+				$.ajaxSetup( { cache: false } );
+
+				// automatically remove blocking when ajax activity finishes
+				$(document).ajaxStop($.unblockUI);
+
+				$mainLayout = $('body').layout(
+				{
+					defaults:
+					{
+						spacing_open:		2
+					,	spacing_closed:		5
+					}
+					,	north__size:	55
+					,	west__size:		225
+					,	east__size:		200
+						// RESIZE Accordion widget when panes resize
+					,	west__onresize:		$.layout.callbacks.resizePaneAccordions
+					//,	east__onresize:		$.layout.callbacks.resizePaneAccordions
+					,	west__initClosed:	true
+					,	east__initClosed:	true
+					,	east__spacing_open:	0
+					,	east__spacing_closed:	0
+					,	west__spacing_closed:	0
+					,	north__closable:	false
+					,	west__closable:		true
+					,	east__closable:		true
+					,	south__closable:	false
+					,	north__resizable:	false
+					,	west__resizable:	true
+					,	east__resizable:	true
+					,	south__resizable:	false
+				});
+
+				$mainInnerLayout = $('body > .ui-layout-center').layout(
+				{
+						north__paneSelector:	".middle-north"
+					,	center__paneSelector:	".middle-center"
+					,	south__paneSelector:	".middle-south"
+					,	north__closable:	false
+					,	north__resizable:	false
+					,	south__closable:	true
+					,	south__resizable:	true
+					,	south__draggable:	true
+					,	south__initClosed:	true
+					,	south__size:		1
+					,	spacing_open:		2  // ALL panes
+					,	spacing_closed:		0  // ALL panes
+				});
+
+				$('.tabsOuter').jqxTabs( { height: 70 } );
+				$('.tabsInner').jqxTabs( { height: 55 } );
+
+				// ACCORDION - in the West pane
+				$("#accordianMenuSet").accordion( { heightStyle: "fill" } );
+				// HACK for Chrome, which adds a spurious scrollbar
+				// this fix will not work in regular CSS settings,
+				// apparently some runtime logic undoes it in that case
+				//$("#accordianMenuSet .accordionMenu").css("overflow", "hidden");
+				$('#accordianMenuSet .accordionMenu ul li').bind('mouseenter', function()
+				{
+					var $this = $(this);
+					if (this.offsetWidth < this.scrollWidth && !$this.attr('title'))
+					{
+						$this.attr('title', $this.text());
+					}
+				});
+
+				//$('#uiLogTextArea').text("");
+
+				// THEME SWITCHER
+				//addThemeSwitcher('.ui-layout-north',{ top: '6px', bottom: '6px', right: '5px' });
+				// if a new theme is applied, it could change the height of some content,
+				// so call resizeAll to 'correct' any header/footer heights affected
+				// NOTE: this is only necessary because we are changing CSS *AFTER LOADING* using themeSwitcher
+				//setTimeout( $mainLayout.resizeAll, 1000 ); /* allow time for browser to re-render with new theme */
+
+			}
+
+			function initMenus()
+			{
+				loadLoginForm();
+
+				$("#genericGrid").click(loadGenericGridPage);
+				$("#genericForm").click(loadGenericFormPage);
+
+				/****$("#dashboard").click(loadAdminDashboardPage);
+				$("#adminDashboard").click(loadAdminDashboardPage);
+				$("#services").click(loadServiceHistoryAdminPage);
+				$("#serviceReqs").click(loadServiceHistoryAdminPage);
+				$("#lbmacAdminModify").click(loadLBMACRequestPage);
+				$("#templates").click(loadTemplatePage);
+				$("#serviceLevels").click(loadServiceLevelPage);
+				$("#overusePolicies").click(loadOverusePolicyPage);
+				$("#hcPolicies").click(loadHealthCheckPolicyPage);
+				$("#resources").click(loadSitePage);
+				$("#sites").click(loadSitePage);
+				$("#zones").click(loadZonePage);
+				$("#ipSubnets").click(loadIPSubnetPage);
+				$("#adxDevices").click(loadADXDevicePage);
+				$("#organization").click(loadDepartmentPage);
+				$("#departments").click(loadDepartmentPage);
+				$("#users").click(loadUserPage);****/
+			}
+
+			//////////// Login form
+
+			function loadLoginForm()
+			{
+				var loginFormInfo = new LoginPageInfo();
+				loginFormInfo.loadPageFromObject();
+			}
+
+			//////////// Generic grid
+
+			function loadGenericGridPage()
+			{
+				// move this to a callback function
+				$('.tabsOuter').css("visibility", "visible");
+				$mainLayout.sizePane("north", 125);
+				$mainLayout.enableClosable("west", true);
+				$mainLayout.open("west");
+				$mainLayout.disableClosable("west", true);
+				$mainLayout.enableClosable("east", true);
+				$mainLayout.open("east");
+				//$mainLayout.disableClosable("east", true);
+
+				// eventually encapsulate this in a subclass constructor
+				// to hide complexity and make the code here simpler
+				var fields =
+				[
+					{ name: 'EmployeeKey', type: 'number' },
+					{ name: 'ParentEmployeeKey', type: 'number' },
+					{ name: 'FirstName', type: 'string' },
+					{ name: 'LastName', type: 'string' },
+					{ name: 'Title', type: 'string' },
+					{ name: 'HireDate', type: 'date' },
+					{ name: 'BirthDate', type: 'date' },
+					{ name: 'Phone', type: 'string' },
+					{ name: 'Gender', type: 'string' },
+					{ name: 'DepartmentName', type: 'string' }
+				];
+				// eventually encapsulate this in a subclass constructor
+				// to hide complexity and make the code here simpler
+				var columns =
+				[
+					{ text: 'FirstName', dataField: 'FirstName', minWidth: 100, width: 200 },
+					{ text: 'LastName',  dataField: 'LastName', width: 200 },
+					{ text: 'Department Name', dataField: 'DepartmentName', width: 150 },
+					{ text: 'Title', dataField: 'Title', width: 300 },
+					{ text: 'Birth Date', dataField: 'BirthDate', cellsFormat: 'd', width: 120 },
+					{ text: 'Hire Date', dataField: 'HireDate', cellsFormat: 'd', width: 120 },
+					{ text: 'Phone', dataField: 'Phone', cellsFormat: 'd', width: 120 }
+				];
+				// eventually encapsulate all these parameters in a subclass
+				// constructor to hide complexity and make the code here simpler
+				var genericGridInfo = new TableJQXPageInfo(
+					'views/generic-grid.html', 'genericGridWorkArea',
+					'Generic Grid Example', 'genericGrid',
+					'sampledata/employeesadv.csv',
+					fields, columns, 'EmployeeKey', 'ParentEmployeeKey',
+					[
+						{ type: eButtonType.eButtonTypeAdd, fn: onGenericGridAdd,
+							selectEnableFn: onGenericGridAddEnable },
+						{ type: eButtonType.eButtonTypeDelete,  fn: onGenericGridDelete,
+							selectEnableFn: onGenericGridDeleteEnable },
+						{ type: eButtonType.eButtonTypeRefresh, fn: null },
+						{ type: eButtonType.eButtonTypeHelp,    fn: null }
+					], initGenericGrid);
+				var hoverText = "This is help text for the generic grid\n" +
+								"It spans multiple lines and it can\n" +
+								"get pretty big.";
+				var helpContent = new HelpContent(hoverText, null);
+				genericGridInfo.addHelpContent(helpContent);
+				genericGridInfo.loadPageFromObject();
+			}
+
+			function initGenericGrid()
+			{
+				// callback fn for more init (optional)
+			}
+
+			function onGenericGridAdd() { }
+
+			function onGenericGridAddEnable() { }
+
+			function onGenericGridDelete() { }
+
+			function onGenericGridDeleteEnable() { }
+
+			//////////// Generic form
+
+			function loadGenericFormPage()
+			{
+				$("#messageArea").text("");
+				var myGenericFormInfo = new MyGenericPageInfo();
+				myGenericFormInfo.loadPageFromObject();
+			}
+
+			//////////// move this elsewhere later
+
+			function busy(message)
+			{
+				if (typeof(message) === 'undefined') { message = null; }
+				if (message == null) { message = "Loading, please wait..."; }
+				$.blockUI( { message: '<h3>' + message + '</h3>' } );
+			}
+
+		</script>
+
+	</head>
+	<body>
+
+		<div class="ui-layout-north ui-widget-content" style="display: none; border: none; overflow: hidden; padding: 2px; top: 4px !important;">
+			<div>
+				<img src="images/logo.png"/>
+				<label>Welcome to the UUI Shell - JQX version</label>
+			</div>
+            <div id='jqxTabsOuter' class="tabsOuter" style="font-size: 105%; visibility: hidden;">
+                <ul style='margin-left: 12px;'>
+                    <li>Dashboard</li>
+                    <li>Configuration</li>
+                    <li>Monitoring</li>
+                    <li>Tools</li>
+                </ul>
+                <div style="padding-top: 5px;">
+                	A dashboard could fill the entire work area below
+                	(and the accordion menu might be hdden in this case)
+                </div>
+                <div>
+					<div id='jqxTabsInnerConfig' class="tabsInner" style="font-size: 95%;">
+						<ul style='margin-left: 8px;'>
+							<li>System</li>
+							<li>Network</li>
+							<li>Servers</li>
+							<li>Catalogs</li>
+							<li>Security</li>
+						</ul>
+						<div></div><div></div><div></div><div></div><div></div>
+					</div>
+                </div>
+                <div>
+					<div id='jqxTabsInnerMonitor' class="tabsInner" style="font-size: 95%;">
+						<ul style='margin-left: 8px;'>
+							<li>Applications</li>
+							<li>Servers</li>
+							<li>Security</li>
+							<li>Traffic</li>
+						</ul>
+						<div></div><div></div><div></div><div></div>
+					</div>
+                </div>
+                <div>
+					<div id='jqxTabsInnerTools' class="tabsInner" style="font-size: 95%;">
+						<ul style='margin-left: 8px;'>
+							<li>Backup/Restore</li>
+							<li>Updates</li>
+							<li>Logging</li>
+							<li>Diagnostocs</li>
+						</ul>
+						<div></div><div></div><div></div><div></div>
+					</div>
+                </div>
+			</div>
+		</div>
+
+		<div id="messageArea" class="ui-layout-south ui-widget-content messageArea" style="display: none; border: gray; border-style: solid; border-width: thin;">Welcome to the UUI Shell</div>
+
+		<div id="centerArea" class="ui-layout-center" style="padding: 0; display: none;">
+
+			<div class="middle-north" style="overflow-y: hidden; background: #eeeeee;">
+				<div style="float: left; vertical-align: middle;">
+					<div id="workAreaTitle" class="workAreaTitleStyle" style="padding-top: 4px;"></div>
+				</div>
+				<div id="workAreaControls" style="float: right; border-width: 0px 0 0;">Work Area controls go here</div>
+			</div>
+
+			<div class="middle-center" style="padding: 0;">
+				<div id="workArea" class="ui-layout-content ui-widget-content" style="padding: 0; overflow: hidden;">
+					<!-- page content goes here -->
+				</div>
+			</div>
+
+			<div class="middle-south" id="workAreaSlideUp" style="height: 1px; overflow-x: hidden; overflow-y: auto;">
+				<a href="#">
+					<img id="closeSlideUpIcon" src="images/black_close_icon.png"
+						 title="Close this panel" style="float: right;"/>
+				</a>
+			</div>
+
+		</div>
+
+		<div class="ui-layout-west" style="display: none; border: gray; border-style: solid; border-width: thin; padding: 0;">
+			<div id="accordianMenuSet" class="basic" style="height: 100%; overflow: hidden;">
+
+				<h3 id="services"><a href="#">Services</a></h3>
+				<div class="accordionMenu" style="margin: 0 !important;">
+					<ul class="menu-items">
+						<li id="genericGrid">Load Generic Grid</li>
+						<li id="genericForm">Load Generic Form</li>
+						<li>Function 1</li>
+						<li>Function 2 with real long name</li>
+						<li>Function 3</li>
+						<li>Function 4</li>
+						<li>Function 5</li>
+						<li>Function 6</li>
+						<li>Function 7</li>
+						<li>Function 8</li>
+					</ul>
+					<!-- button id="serviceReqs">Service History</button>
+					<button id="lbmacAdminModify">Modify Services</button>
+					<button id="templates">Manage Templates</button>
+					<button id="serviceLevels">Service Levels</button -->
+				</div>
+
+				<h3 id="resources"><a href="#">Resources</a></h3>
+				<div class="accordionMenu" style="margin: 0 !important;">
+					<ul class="menu-items">
+						<li>Function 1</li>
+						<li>Function 2</li>
+						<li>Function 3</li>
+						<li>Function 4</li>
+						<li>Function 5</li>
+						<li>Function 6</li>
+						<li>Function 7</li>
+						<li>Function 8</li>
+						<li>Function 9</li>
+						<li>Function 10</li>
+						<li>Function 11</li>
+						<li>Function 12</li>
+						<li>Function 13</li>
+						<li>Function 14</li>
+						<li>Function 15</li>
+						<li>Function 16</li>
+						<li>Function 17</li>
+						<li>Function 18</li>
+						<li>Function 19</li>
+						<li>Function 20</li>
+					</ul>
+					<!-- button id="sites">Sites</button>
+					<button id="zones">Zones</button>
+					<button id="ipSubnets">IP Subnets</button>
+					<button id="adxDevices">ADX Devices</button -->
+				</div>
+
+				<h3 id="organization"><a href="#">Organization</a></h3>
+				<div class="accordionMenu" style="margin: 0 !important;">
+					<ul class="menu-items">
+						<li>Function 1</li>
+						<li>Function 2</li>
+						<li>Function 3</li>
+						<li>Function 4</li>
+						<li>Function 5</li>
+						<li>Function 6</li>
+					</ul>
+					<!-- <button id="departments">Cost Centers</button>
+					<button id="users">Users</button -->
+				</div>
+
+			</div>
+
+			<!-- div id="jqxNavigationBar">
+				<div>
+					<div style='margin-top: 2px;'>
+						<div style='float: left;'>
+							<img alt='Mail' src='images/mailIcon.png' />
+						</div>
+						<div style='margin-left: 4px; float: left;'>
+							Mail
+						</div>
+					</div>
+				</div>
+				<div>
+					<ul>
+						<li><a href='#'>Contacts</a></li>
+						<li><a href='#'>Mails</a></li>
+						<li><a href='#'>Notes</a></li>
+						<li><a href='#'>Function 1</a></li>
+						<li><a href='#'>Function 2</a></li>
+						<li><a href='#'>Function 3</a></li>
+						<li><a href='#'>Function 4</a></li>
+						<li><a href='#'>Function 5</a></li>
+						<li><a href='#'>Function 6</a></li>
+						<li><a href='#'>Function 7</a></li>
+						<li><a href='#'>Function 8</a></li>
+					</ul>
+				</div>
+				<div>
+					<div style='margin-top: 2px;'>
+						<div style='float: left;'>
+							<img alt='Mail' src='images/contactsIcon.png' />
+						</div>
+						<div style='margin-left: 4px; float: left;'>
+							Contacts
+						</div>
+					</div>
+				</div>
+				<div>
+					<ul>
+						<li><a href='#'>Business Cards</a></li>
+						<li><a href='#'>Address Cards</a></li>
+						<li><a href='#'>Detailed Address Cards</a></li>
+						<li><a href='#'>Phone List</a></li>
+						<li><a href='#'>Function 1</a></li>
+						<li><a href='#'>Function 2</a></li>
+						<li><a href='#'>Function 3</a></li>
+						<li><a href='#'>Function 4</a></li>
+						<li><a href='#'>Function 5</a></li>
+						<li><a href='#'>Function 6</a></li>
+						<li><a href='#'>Function 7</a></li>
+						<li><a href='#'>Function 8</a></li>
+						<li><a href='#'>Function 9</a></li>
+						<li><a href='#'>Function 10</a></li>
+						<li><a href='#'>Function 11</a></li>
+						<li><a href='#'>Function 12</a></li>
+						<li><a href='#'>Function 13</a></li>
+						<li><a href='#'>Function 14</a></li>
+						<li><a href='#'>Function 15</a></li>
+						<li><a href='#'>Function 16</a></li>
+						<li><a href='#'>Function 17</a></li>
+						<li><a href='#'>Function 18</a></li>
+					</ul>
+				</div>
+				<div>
+					<div style='margin-top: 2px;'>
+						<div style='float: left;'>
+							<img alt='Mail' src='images/tasksIcon.png' />
+						</div>
+						<div style='margin-left: 4px; float: left;'>
+							Tasks
+						</div>
+					</div>
+				</div>
+				<div>
+					<ul>
+						<li><a href='#'>Simple List</a></li>
+						<li><a href='#'>Detailed List</a></li>
+						<li><a href='#'>Active Tasks</a></li>
+						<li><a href='#'>Phone List</a></li>
+					</ul>
+				</div>
+				<div>
+					<div style='margin-top: 2px;'>
+						<div style='float: left;'>
+							<img alt='Mail' src='images/notesIcon.png' />
+						</div>
+						<div style='margin-left: 4px; float: left;'>
+							Notes
+						</div>
+					</div>
+				</div>
+				<div>
+					<ul>
+						<li><a href='#'>Icons</a></li>
+						<li><a href='#'>Notes List</a></li>
+						<li><a href='#'>Last Seven Days</a></li>
+					</ul>
+				</div>
+			</div -->
+		</div>
+
+		<div class="ui-layout-east ui-widget-content" style="padding: 10px; font-size:12px;">
+			This sample implementation shows the following:
+			<ul>
+				<li>Simple App shell with border layout (North. South, East, West panels)
+				with reliable geometry management</li>
+				<li>jQueryUI Accordion Menu with proper geometry management
+				(JQX and Kendo accordions do NOT resize properly)</li>
+				<li>JQX Table with correct geometry management in the inner work area</li>
+				<li>Object oriented (and lazy loaded) implementation of login,
+				summary table and form pages, all implemented as a polymorphic subclass
+				of a base class where common page services can live</li>
+		</div>
+
+	</body>
+</html>

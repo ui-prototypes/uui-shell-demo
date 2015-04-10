@@ -1,0 +1,105 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!--
+ Copyright 2013 by Brocade Communication Systems
+ All rights reserved.
+
+ This software is the confidential and proprietary information
+ of Brocade Communication Systems, ("Confidential Information").
+ You shall not disclose such Confidential Information and shall
+ use it only in accordance with the terms of the license agreement
+ you entered into with Brocade Communication Systems.
+-->
+<html>
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+		<style type="text/css">
+			td label
+			{
+				vertical-align: top;
+				margin-left: 5px;
+			}
+			html, body
+			{
+				height: 100%;
+			}
+			#loginFormWorkArea
+			{
+				height: 100%;
+				width: 100%;
+				display: table;
+			}
+			#loginFormCenterDiv
+			{
+				vertical-align: middle;
+				display: table-cell;
+				height: 100%;
+			}
+			#loginFormCenterDiv table
+			{
+				margin: 0 auto;
+				padding: 20px;
+				border: 1px solid black;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="loginFormWorkArea" style="width: 100%; height: 100%; display: table;">
+			<div id="loginFormCenterDiv" style="vertical-align: middle; display: table-cell; height: 100%;">
+				<table id="loginFormTable" border="0" style="margin: 0 auto; padding: 20px; border: 1px solid #a0a0a0;">
+					<tr align="center">
+						<td colspan="2">
+							<label style="font-size: 24px; text-align: center;">Universal UI Login</label>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div style="height: 15px;"></div>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 85px;" align="right">
+							<label class="ui-form-label-color">User ID:</label>
+						</td>
+						<td style="padding-right: 10px;">
+							<input type="text" id="userField" class="ui-form-input-color" style="width: 125px;" value=""/>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 85px;" align="right">
+							<label class="ui-form-label-color">Password:</label>
+						</td>
+						<td style="padding-right: 10px;">
+							<input type="password" id="passwordField" class="ui-form-input-color" style="width: 125px;" value=""/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<div style="height: 5px;"></div>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="2">
+							<table style="width: 100%; padding-right: 6px; border: none;">
+								<tr>
+									<td style="width: 100%;"></td>
+									<!-- maybe the class workAreaControl is not needed -->
+									<td>
+										<input id="loginButton" type="button" class="workAreaControl" value="Login" style="width: 64px; margin: 0px; padding: 0px;"/>
+									</td>
+									<td>
+										<input id="clearButton" type="button" class="workAreaControl" value="Clear" style="width: 64px; margin: 0px; padding: 0px;"/>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="3" style="font-size: 0.75em; text-align: right;">
+										(fake login: just type anything<br/>for user and password)
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+</html>
